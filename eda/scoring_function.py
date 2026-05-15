@@ -9,7 +9,7 @@ def score_model_optimal_k(y_true, y_proba, n_vars, max_k=1000, keep_fp_tp=False)
 
     order = np.argsort(y_proba)[::-1]
     y_true_sorted = y_true[order]
-
+    y_proba_sorted = y_proba[order]
     best_score = -np.inf
     best_k = 0
     tp = 0
@@ -29,6 +29,8 @@ def score_model_optimal_k(y_true, y_proba, n_vars, max_k=1000, keep_fp_tp=False)
             best_k = k
             best_fp = fp
             best_tp = tp
+            best_threshold = y_proba_sorted[k - 1]
+    print("Best threshold:", best_threshold)
     if keep_fp_tp:
         return best_score, best_k, best_fp, best_tp
     return best_score, best_k

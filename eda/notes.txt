@@ -5,7 +5,13 @@ based on MI, of all features 236 is of special importance, the ten best (from wo
 ['V366', 'V62', 'V430', 'V387', 'V376', 'V247', 'V8', 'V346', 'V164','V236']
 
 non-zero mi features from top 10 best xgboost: v255,v215,v160
-
+features with different distributions:
+[  'V3',   'V5',   'V6',  'V11',  'V32',  'V46',  'V55',  'V60',  'V72',
+  'V78', 'V117', 'V120', 'V127', 'V146', 'V160', 'V161', 'V175', 'V176',
+ 'V179', 'V185', 'V191', 'V198', 'V199', 'V215', 'V221', 'V224', 'V227',
+ 'V255', 'V256', 'V262', 'V265', 'V283', 'V291', 'V293', 'V309', 'V313',
+ 'V326', 'V329', 'V342', 'V345', 'V358', 'V377', 'V380', 'V390', 'V393',
+ 'V416', 'V427', 'V435', 'V443', 'V454', 'V464', 'V469', 'V483']
 all non-zero mutual information features:
  ['V307', 'V465', 'V490', 'V221', 'V179', 'V151', 'V184', 'V422', 'V432', 'V102', 'V111', 'V103',
  'V205', 'V70', 'V496', 'V325', 'V414', 'V455', 'V330', 'V302', 'V110', 'V479', 'V351', 'V219',
