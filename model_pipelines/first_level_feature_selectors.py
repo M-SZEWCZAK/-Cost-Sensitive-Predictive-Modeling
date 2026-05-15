@@ -23,7 +23,8 @@ many configurations.
 """
 
 
-__all__ = ['reduce_multicollinearity','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector']
+__all__ = ['reduce_multicollinearity','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector',
+           'random_forest_selector','xgb_selector']
 # ===== VIF check =======
 
 
