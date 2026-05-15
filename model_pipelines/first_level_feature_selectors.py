@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -14,7 +15,49 @@ from sklearn.metrics import ConfusionMatrixDisplay
 from xgboost import XGBClassifier
 from eda.scoring_function import score_model_optimal_k
 from sklearn.feature_selection import mutual_info_classif
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+"""
+The functions provided here are supposed to be first level elimination, so that only a handful 
+of best features are considered in final checks, where the remaining features will be evaluated in
+many configurations. 
+"""
 
+
+__all__ = ['reduce_multicollinearity','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector']
+# ===== VIF check =======
+
+
+def reduce_multicollinearity(df, threshold=5.0):
+    """
+    Iteratively removes features with a VIF above a specified threshold.
+
+    Parameters:
+    df (DataFrame): The input dataframe containing only the independent numerical features.
+    threshold (float): The VIF threshold. Features with a VIF higher than this will be dropped.
+                       Common thresholds are 5.0 or 10.0.
+
+    Returns:
+    DataFrame: A new dataframe with the highly correlated features removed.
+    """
+    X = df.copy()
+
+    while True:
+        vif_data = pd.DataFrame()
+        vif_data["feature"] = X.columns
+        vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+        max_vif = vif_data["VIF"].max()
+        if max_vif <= threshold:
+            break
+        max_vif_feature = vif_data.sort_values(by="VIF", ascending=False).iloc[0]["feature"]
+        print(f"Dropping '{max_vif_feature}' (VIF: {max_vif:.2f})")
+
+        X = X.drop(columns=[max_vif_feature])
+        if X.shape[1] <= 1:
+            break
+
+    print("\nFeature reduction complete.")
+    return X
+# ===== model-agnostic selectors =======
 def select_best_mutual_information(x_train,y_train,n_features):
     """
     :param x_train: training data
@@ -68,6 +111,41 @@ def Kolmogorov_Smirnov_selector(x_train,y_train,n_features):
     ranking_df = pd.DataFrame(ks_results).sort_values(by='ks_statistic', ascending=False)
     top_n_features = ranking_df['feature'].head(n_features).tolist()
     return top_n_features, ranking_df
+# ===== model specific selectors ====
+def random_forest_selector(x_train,y_train,n_features,vif_check=False):
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    if vif_check:
+        x_train=reduce_multicollinearity(x_train,5)
+    model.fit(x_train, y_train)
+    importances = pd.Series(model.feature_importances_, index=x_train.columns)
+    importances = importances.sort_values(ascending=False)
+    return importances.head(n_features).index.tolist()
+def xgb_selector(x_train,y_train,n_features,importance_type="gain",vif_check=False):
+    model= XGBClassifier(n_estimators=100, random_state=42)
+    if vif_check:
+        x_train=reduce_multicollinearity(x_train,5)
+    model.fit(x_train, y_train)
+    booster = model.get_booster()
+    gain_importance = booster.get_score(importance_type='gain')
+    weight_importance = booster.get_score(importance_type='weight')
+    gain_importance_df = pd.DataFrame({
+        'Feature': gain_importance.keys(),
+        'Gain (Importance)': gain_importance.values()
+    }).sort_values(by='Gain (Importance)', ascending=False)
+    weight_importance_df = pd.DataFrame({
+        'Feature': gain_importance.keys(),
+        'Weight (Importance)': weight_importance.values()
+    }).sort_values(by='Weight (Importance)', ascending=False)
+    if importance_type == "gain":
+        return gain_importance_df.head(n_features)
+    elif importance_type == "weight":
+        return weight_importance_df.head(n_features)
+    else:
+        raise ValueError("Available importance methods are \"gain\" and \"weight\"")
+
+
+
+
 
 
 
