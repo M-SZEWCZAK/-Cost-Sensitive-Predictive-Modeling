@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from boruta import BorutaPy
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
@@ -23,14 +24,15 @@ many configurations.
 """
 
 
-__all__ = ['reduce_multicollinearity','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector',
+__all__ = ['reduce_multicollinearity','remove_highly_correlated','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector',
            'random_forest_selector','xgb_selector']
-# ===== VIF check =======
+# ===== collinearity reduction =======
 
 
 def reduce_multicollinearity(df, threshold=5.0):
     """
-    Iteratively removes features with a VIF above a specified threshold.
+    Iteratively removes features with a VIF above a specified threshold. For a big number of features
+    it is too slow.
 
     Parameters:
     df (DataFrame): The input dataframe containing only the independent numerical features.
@@ -58,6 +60,15 @@ def reduce_multicollinearity(df, threshold=5.0):
 
     print("\nFeature reduction complete.")
     return X
+def remove_highly_correlated(df,threshold=0.9):
+    corr_matrix = df.corr().abs()
+    upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+    to_drop = [column for column in upper_tri.columns if any(upper_tri[column] > threshold)]
+    df_dropped = df.drop(columns=to_drop)
+    print(f"Original features count: {df.shape[1]}")
+    print(f"Dropped features count:  {len(to_drop)}")
+    print(f"Remaining features count: {df_dropped.shape[1]}")
+    return df_dropped
 # ===== model-agnostic selectors =======
 def select_best_mutual_information(x_train,y_train,n_features):
     """
@@ -112,6 +123,32 @@ def Kolmogorov_Smirnov_selector(x_train,y_train,n_features):
     ranking_df = pd.DataFrame(ks_results).sort_values(by='ks_statistic', ascending=False)
     top_n_features = ranking_df['feature'].head(n_features).tolist()
     return top_n_features, ranking_df
+def boruta_handler(x,y,max_depth=3,model_type='rf',return_='filtered_df'):
+    if return_ not in ['filtered_df','support','ranking','all']:
+        raise ValueError("return_ must be one of ['filtered_df','support','ranking','all']")
+    if model_type not in ['rf','xgb']:
+        raise ValueError('model_type must be either "rf" or "xgb"')
+    if model_type == 'xgb':
+        model=XGBClassifier(class_weight='balanced',max_depth=max_depth)
+    else:
+        model=RandomForestClassifier(class_weight='balanced',max_depth=max_depth)
+    x_n=x.values
+    y_n=y.ravel()
+    feat_selector = BorutaPy(model, n_estimators='auto', verbose=2, random_state=1)
+    feat_selector.fit(x_n, y_n)
+    print(feat_selector.support_)
+    print(feat_selector.ranking_)
+    if return_ == 'filtered_df':
+        pass
+    elif return_ == 'support':
+        return feat_selector.support_
+    elif return_ == 'ranking':
+        return feat_selector.ranking_
+    else:
+        return feat_selector.support_,feat_selector.ranking_
+
+
+
 # ===== model specific selectors ====
 def random_forest_selector(x_train,y_train,n_features,vif_check=False):
     model = RandomForestClassifier(n_estimators=100, random_state=42)

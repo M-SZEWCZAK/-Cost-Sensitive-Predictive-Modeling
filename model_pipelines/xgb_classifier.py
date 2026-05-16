@@ -53,4 +53,5 @@ def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=
         plt.ylabel("Custom metric")
         plt.show()
     return best_model,features_selected
-
+def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,plot=True):
+    pass
