@@ -25,7 +25,7 @@ many configurations.
 
 
 __all__ = ['reduce_multicollinearity','remove_highly_correlated','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector',
-           'random_forest_selector','xgb_selector']
+           'random_forest_selector','xgb_selector','boruta_handler']
 # ===== collinearity reduction =======
 
 
@@ -133,7 +133,7 @@ def boruta_handler(x,y,max_depth=3,model_type='rf',return_='filtered_df'):
     else:
         model=RandomForestClassifier(class_weight='balanced',max_depth=max_depth)
     x_n=x.values
-    y_n=y.ravel()
+    y_n=y.values.ravel()
     feat_selector = BorutaPy(model, n_estimators='auto', verbose=2, random_state=1)
     feat_selector.fit(x_n, y_n)
     print(feat_selector.support_)

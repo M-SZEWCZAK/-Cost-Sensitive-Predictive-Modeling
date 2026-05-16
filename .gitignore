@@ -4,7 +4,7 @@ __pycache__/
 .venv/
 venv/
 env/
-./eda/notes.txt
+model_pipelines/function_tester.ipynb
 .ipynb_checkpoints/
 .pytest_cache/
 .DS_Store

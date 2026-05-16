@@ -1,3 +1,12 @@
+features marked as relevant by rf boruta:
+['V5', 'V11', 'V32', 'V46', 'V60', 'V117', 'V120', 'V160', 'V161',
+       'V175', 'V176', 'V191', 'V199', 'V215', 'V224', 'V227', 'V255', 'V262',
+       'V265', 'V309', 'V313', 'V329', 'V342', 'V345', 'V380', 'V390', 'V416',
+       'V443', 'V483']
+przy wyborze 20 cech innymi first level selectors poza xgb wszystkie zawarte w borucie. Zatem należy
+najpewniej ograniczyć się do tych 29 cech. przy dalszych rozważaniach.
+
+
 v224,v345,v175 (or v32) and perheaps v390 should be considered for modelling,
 when checking top 10 correlated files.
 

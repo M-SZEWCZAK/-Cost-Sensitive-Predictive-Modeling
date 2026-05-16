@@ -1,14 +1,13 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import sklearn as sk
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
-from sklearn.metrics import ConfusionMatrixDisplay
 from xgboost import XGBClassifier
 
+from model_pipelines.auxilliary_functions import *
 from eda.scoring_function import score_model_optimal_k
 def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=True):
+    #max subset is a list of columns to be considered in final training
     x_train_=X_train.loc[:,max_subset]
     x_test_=X_test.loc[:,max_subset]
     custom_scores=np.zeros(len(max_subset))
@@ -53,5 +52,47 @@ def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=
         plt.ylabel("Custom metric")
         plt.show()
     return best_model,features_selected
-def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,plot=True):
-    pass
+def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_depth=1,n_estimators=3000,plot=True):
+    possible_subsets=get_subsets(max_subset)
+    n_subsets=len(possible_subsets)
+    custom_scores=np.zeros(n_subsets)
+    precision_scores=np.zeros(n_subsets)
+    accuracy_scores=np.zeros(n_subsets)
+    recall_scores=np.zeros(n_subsets)
+    best_subset=0
+    lens = [len(subset) for subset in possible_subsets]
+    for i in range(n_subsets):
+        clf = XGBClassifier(max_depth=max_depth,n_estimators=n_estimators)
+        clf.fit(X_train.loc[:, possible_subsets[i]], y_train)
+        y_pred = clf.predict(X_test.loc[:, possible_subsets[i]])
+        y_proba = clf.predict_proba(X_test.loc[:, possible_subsets[i]])[:, 1]
+        recall_scores[i] = recall_score(y_test, y_pred)
+        precision_scores[i] = precision_score(y_test, y_pred)
+        accuracy_scores[i] = accuracy_score(y_test, y_pred)
+        custom_scores[i] = score_model_optimal_k(y_test, y_proba, lens[i])[0]
+        if i==0:
+            best_model=clf
+        elif custom_scores[i] > custom_scores[best_subset]:
+            best_subset = i
+            best_model = clf
+    features_selected=possible_subsets[best_subset]
+    if plot:
+        plt.scatter(lens,precision_scores,label="Precision")
+        plt.xlabel("Subset size")
+        plt.ylabel("Precision")
+        plt.show()
+        plt.scatter(lens,accuracy_scores,label="Accuracy")
+        plt.xlabel("Subset size")
+        plt.ylabel("Accuracy")
+        plt.show()
+        plt.scatter(lens,recall_scores,label="Recall")
+        plt.xlabel("Subset size")
+        plt.ylabel("Recall")
+        plt.show()
+        plt.scatter(lens,custom_scores,label="Custom")
+        plt.xlabel("Subset size")
+        plt.ylabel("Custom score")
+        plt.show()
+
+    return best_model,features_selected
+
