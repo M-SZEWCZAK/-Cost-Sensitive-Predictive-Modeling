@@ -6,10 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
 from sklearn.metrics import ConfusionMatrixDisplay
-from xgboost import XGBClassifier
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
 from scipy.stats import ks_2samp
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -17,6 +14,7 @@ from xgboost import XGBClassifier
 from eda.scoring_function import score_model_optimal_k
 from sklearn.feature_selection import mutual_info_classif
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+import shap
 """
 The functions provided here are supposed to be first level elimination, so that only a handful 
 of best features are considered in final checks, where the remaining features will be evaluated in
@@ -25,7 +23,7 @@ many configurations.
 
 
 __all__ = ['reduce_multicollinearity','remove_highly_correlated','select_best_mutual_information','select_best_correlation','Kolmogorov_Smirnov_selector',
-           'random_forest_selector','xgb_selector','boruta_handler']
+           'random_forest_selector','xgb_selector','boruta_handler','SHAP_selector']
 # ===== collinearity reduction =======
 
 
@@ -106,6 +104,7 @@ def Kolmogorov_Smirnov_selector(x_train,y_train,n_features):
     if not isinstance(x_train, pd.DataFrame):
         x_train = pd.DataFrame(x_train)
     feature_cols = x_train.select_dtypes(include=['number']).columns
+    y_train = y_train.values.ravel()
     classes = pd.Series(y_train).unique()
     if len(classes) != 2:
         raise ValueError("This method is designed strictly for binary classification (2 classes).")
@@ -123,9 +122,10 @@ def Kolmogorov_Smirnov_selector(x_train,y_train,n_features):
     ranking_df = pd.DataFrame(ks_results).sort_values(by='ks_statistic', ascending=False)
     top_n_features = ranking_df['feature'].head(n_features).tolist()
     return top_n_features, ranking_df
-def boruta_handler(x,y,max_depth=3,model_type='rf',return_='filtered_df'):
-    if return_ not in ['filtered_df','support','ranking','all']:
-        raise ValueError("return_ must be one of ['filtered_df','support','ranking','all']")
+# === selectors based on tree-based models, with selectable model type
+def boruta_handler(x,y,max_depth=3,model_type='rf',return_='support'):
+    if return_ not in ['support','ranking','all']:
+        raise ValueError("return_ must be one of ['support','ranking','all']")
     if model_type not in ['rf','xgb']:
         raise ValueError('model_type must be either "rf" or "xgb"')
     if model_type == 'xgb':
@@ -138,28 +138,61 @@ def boruta_handler(x,y,max_depth=3,model_type='rf',return_='filtered_df'):
     feat_selector.fit(x_n, y_n)
     print(feat_selector.support_)
     print(feat_selector.ranking_)
-    if return_ == 'filtered_df':
-        pass
-    elif return_ == 'support':
+    if return_ == 'support':
         return feat_selector.support_
     elif return_ == 'ranking':
         return feat_selector.ranking_
     else:
         return feat_selector.support_,feat_selector.ranking_
 
+def SHAP_selector(x_train,y_train,n_features,modeltype='xgb',n_estimators=1000,max_depth=3,present_shap_plot=True,random_state=2137):
+    if modeltype not in ['xgb','rf']:
+        raise ValueError('modeltype must be either "xgb" or "rf"')
+    if modeltype == 'xgb':
+        model=XGBClassifier(class_weight='balanced',max_depth=max_depth,n_estimators=n_estimators,learning_rate=0.01,n_jobs=-1,random_state=random_state)
+    else:
+        model=RandomForestClassifier(class_weight='balanced',max_depth=max_depth,n_estimators=n_estimators,random_state=random_state)
+    model.fit(x_train, y_train)
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer(x_train)
+    if len(shap_values.values.shape) == 3:
+        raw_shap_matrix = shap_values.values[:, :, 1]
+    else:
+        raw_shap_matrix = shap_values.values
+    if present_shap_plot:
+        plt.figure(figsize=(10, 5))
+        plot_obj = shap.Explanation(
+            values=raw_shap_matrix,
+            data=x_train.values,
+            feature_names=x_train.columns
+        )
+        shap.plots.bar(plot_obj, max_display=10)
+        plt.title("Global Feature Importance via SHAP")
+        plt.tight_layout()
+        plt.show()
+
+        plt.figure(figsize=(10, 6))
+        shap.plots.beeswarm(plot_obj, max_display=10)
+        plt.title("SHAP Beeswarm Plot: Feature Value vs. Model Impact")
+        plt.tight_layout()
+        plt.show()
+    mean_abs_shap = np.mean(np.abs(raw_shap_matrix), axis=0)
+    sorted_indices = np.argsort(mean_abs_shap)[::-1]
+    sorted_features = x_train.columns[sorted_indices]
+    return sorted_features[:n_features].tolist()
 
 
 # ===== model specific selectors ====
-def random_forest_selector(x_train,y_train,n_features,vif_check=False):
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+def random_forest_selector(x_train,y_train,n_features,vif_check=False,n_estimators=1000,max_depth=3,random_state=42):
+    model = RandomForestClassifier(n_estimators=n_estimators,max_depth=max_depth, random_state=random_state)
     if vif_check:
         x_train=reduce_multicollinearity(x_train,5)
     model.fit(x_train, y_train)
     importances = pd.Series(model.feature_importances_, index=x_train.columns)
     importances = importances.sort_values(ascending=False)
     return importances.head(n_features).index.tolist()
-def xgb_selector(x_train,y_train,n_features,importance_type="gain",vif_check=False):
-    model= XGBClassifier(n_estimators=100, random_state=42)
+def xgb_selector(x_train,y_train,n_features,importance_type="gain",vif_check=False,n_estimators=1000,max_depth=3,learning_rate=0.01,random_state=42,return_='weight_df'):
+    model= XGBClassifier(n_estimators=n_estimators,max_depth=max_depth,learning_rate=learning_rate, random_state=random_state)
     if vif_check:
         x_train=reduce_multicollinearity(x_train,5)
     model.fit(x_train, y_train)
@@ -175,9 +208,15 @@ def xgb_selector(x_train,y_train,n_features,importance_type="gain",vif_check=Fal
         'Weight (Importance)': weight_importance.values()
     }).sort_values(by='Weight (Importance)', ascending=False)
     if importance_type == "gain":
-        return gain_importance_df.head(n_features)
+        if return_ == "weight_df":
+            return gain_importance_df.head(n_features)
+        else:
+            return gain_importance_df.head(n_features).loc[:,'Feature'].tolist()
     elif importance_type == "weight":
-        return weight_importance_df.head(n_features)
+        if return_ == "weight_df":
+            return weight_importance_df.head(n_features)
+        else:
+            return weight_importance_df.head(n_features).loc[:,'Feature'].tolist()
     else:
         raise ValueError("Available importance methods are \"gain\" and \"weight\"")
 

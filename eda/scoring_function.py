@@ -3,7 +3,7 @@ import numpy as np
 from pandas.conftest import ascending
 
 
-def score_model_optimal_k(y_true, y_proba, n_vars, max_k=1000, keep_fp_tp=False):
+def score_model_optimal_k(y_true, y_proba, n_vars, max_k=1000, keep_fp_tp=False,tp_reward=10,fp_penalty=5,feature_penalty=200):
     y_true = np.asarray(y_true)
     y_proba = np.asarray(y_proba).squeeze()
 
@@ -22,7 +22,7 @@ def score_model_optimal_k(y_true, y_proba, n_vars, max_k=1000, keep_fp_tp=False)
         else:
             fp += 1
 
-        score = (tp * 10) - (fp * 5) - (n_vars * 200)
+        score = (tp * tp_reward) - (fp * fp_penalty) - (n_vars * feature_penalty)
 
         if score > best_score:
             best_score = score
