@@ -9,6 +9,14 @@ def find_common_elements(*arrays):
         return []
     common_set = set(arrays[0]).intersection(*arrays[1:])
     return list(common_set)
+def find_sum_of_arrays(*arrays):
+    """
+    Finds the set-theoretic sum of elements across an arbitrary number of arrays.
+    """
+    if not arrays:
+        return []
+    sum_set = set(arrays[0]).union(*arrays[1:])
+    return list(sum_set)
 def plot_correlation_matrix(m):
     plt.figure(figsize=(20, 15))
     sns.heatmap(m,

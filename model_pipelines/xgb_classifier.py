@@ -69,7 +69,7 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
         recall_scores[i] = recall_score(y_test, y_pred)
         precision_scores[i] = precision_score(y_test, y_pred)
         accuracy_scores[i] = accuracy_score(y_test, y_pred)
-        custom_scores[i] = score_model_optimal_k(y_test, y_proba, lens[i],feature_penalty=200*test_ratio,max_k=1000*test_ratio)[0]
+        custom_scores[i] = score_model_optimal_k(y_test, y_proba, lens[i],feature_penalty=200*test_ratio,max_k=int(1000*test_ratio))[0]
         if i==0:
             best_model=clf
         elif custom_scores[i] > custom_scores[best_subset]:
@@ -105,7 +105,7 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
         ).set_index("Subset index")
         return best_model,features_selected,df
     return best_model,features_selected
-def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test):
+def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_ratio=0.2):
     max_depths=[1,2,3,5]
     n_estimatorss=[500,1000,2000,3000]
     lr=[0.001,0.005,0.01,0.1]
@@ -130,7 +130,7 @@ def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test):
                 y_pred = clf.predict(x_test)
                 y_proba = clf.predict_proba(x_test)[:,1]
                 precision=precision_score(y_test, y_pred)
-                custom=score_model_optimal_k(y_test, y_proba,n_features )[0]
+                custom=score_model_optimal_k(y_test, y_proba,n_features,max_k=int(1000*test_ratio),feature_penalty=200*test_ratio )[0]
                 if custom>best_custom:
                     best_custom_hyperparameters['max_depth']=max_depth
                     best_custom_hyperparameters['n_estimators']=n_estimators
