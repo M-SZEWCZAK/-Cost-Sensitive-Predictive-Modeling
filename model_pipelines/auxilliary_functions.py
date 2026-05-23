@@ -39,3 +39,47 @@ def get_subsets(arr):
     for x in arr:
         result += [curr + [x] for curr in result]
     return result[1:]
+def unpack_whole_feature_dict(dict,extract='common'):
+    """
+    returns the features found by different methods as a list. if extract parameter is set to 'common'
+    it will return the features found by all methods applied in the passed dict, if extract is set to 'all_found'
+    it will return all the features found by at least one method, else it returns both sets with
+    features found by at least one method as first element. all are return as arrays.
+    """
+    all_arrays = []
+    for value in dict.values():
+        if isinstance(value, dict):
+            all_arrays.extend(value.values())
+        elif isinstance(value, list):
+            all_arrays.append(value)
+    # Pass the extracted lists to your function using * unpacking
+    total_unique_features = find_sum_of_arrays(*all_arrays)
+    total_common_features = find_common_elements(*all_arrays)
+    if extract == 'common':
+        return total_common_features
+    elif extract == 'all_found':
+        return total_unique_features
+    else:
+        return total_unique_features,total_common_features
+def unpack_model_feature_dict(dict,model_key,extract='common'):
+    """
+       returns the features found by a model method passed in argument model_key (ex. 'xgb')  as a list.
+       if extract parameter is set to 'common' it will return the features found by all methods
+        applied in the passed dict, if extract is set to 'all_found' it will return all the
+        features found by at least one method, else it returns both sets with
+       features found by at least one method as first element. all are return as arrays.
+       """
+    model_arrays = [
+        arrays
+        for key, sub_dict in dict.items()
+        if model_key in key and isinstance(sub_dict, dict)
+        for arrays in sub_dict.values()
+    ]
+    model_unique_features = find_sum_of_arrays(*model_arrays)
+    model_common_features = find_common_elements(*model_arrays)
+    if extract == 'common':
+        return model_common_features
+    elif extract == 'all_found':
+        return model_unique_features
+    else:
+        return model_unique_features,model_common_features
