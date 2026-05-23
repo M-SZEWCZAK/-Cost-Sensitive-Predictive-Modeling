@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 import gc
 from model_pipelines.auxilliary_functions import *
@@ -14,7 +15,7 @@ def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=
     precision_scores=np.zeros(len(max_subset))
     accuracy_scores=np.zeros(len(max_subset))
     recall_scores=np.zeros(len(max_subset))
-    clf1=XGBClassifier()
+    clf1=XGBClassifier(random_state=42)
     clf1.fit(x_train_.iloc[:,:1],y_train)
     y_pred=clf1.predict(x_test_.iloc[:,:1])
     y_proba=clf1.predict_proba(x_test_.iloc[:,0])[:,1]
@@ -62,7 +63,7 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
     best_subset=0
     lens = [len(subset) for subset in possible_subsets]
     for i in range(n_subsets):
-        clf = XGBClassifier(max_depth=max_depth,n_estimators=n_estimators,n_jobs=-1)
+        clf = XGBClassifier(max_depth=max_depth,n_estimators=n_estimators,n_jobs=-1,random_state=42)
         clf.fit(X_train.loc[:, possible_subsets[i]], y_train)
         y_pred = clf.predict(X_test.loc[:, possible_subsets[i]])
         y_proba = clf.predict_proba(X_test.loc[:, possible_subsets[i]])[:, 1]
@@ -97,6 +98,7 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
     if return_metrics:
         df = pd.DataFrame(
             {
+                "Subset index": range(len(custom_scores)),
                 "Custom Score": custom_scores,
                 "Precision": precision_scores,
                 "Accuracy": accuracy_scores,
@@ -125,7 +127,7 @@ def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_r
     for max_depth in max_depths:
         for n_estimators in n_estimatorss:
             for j in range(len(lr)):
-                clf = XGBClassifier(max_depth=max_depth, n_estimators=n_estimators,learning_rate=lr[j],n_jobs=-1)
+                clf = XGBClassifier(max_depth=max_depth, n_estimators=n_estimators,learning_rate=lr[j],n_jobs=-1,random_state=42)
                 clf.fit(x_train,y_train)
                 y_pred = clf.predict(x_test)
                 y_proba = clf.predict_proba(x_test)[:,1]
@@ -141,7 +143,25 @@ def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_r
                     best_precision_hyperparameters['n_estimators']=n_estimators
                     best_precision_hyperparameters['lr']=lr[j]
                     best_precision=precision
-                print(f"hyperparameters: max depth={max_depth}, n_estimators={n_estimators}, lr={lr[j]}, custom_score={custom}")
+                # print(f"hyperparameters: max depth={max_depth}, n_estimators={n_estimators}, lr={lr[j]}, custom_score={custom}")
     return best_custom_hyperparameters,best_precision_hyperparameters
 
-
+def check_xgb_model_with_multi_split(x,y,max_depth,n_estimators,learning_rate,test_ratio=0.2,n_checks=5,keep_fp_tp=False,threshold=0.5):
+    scores=[]
+    precisions=[]
+    n_features=x.shape[1]
+    rng = np.random.default_rng(42)
+    seeds = rng.integers(0, 10_000, size=n_checks).tolist()
+    for i in range(n_checks):
+        xgb=XGBClassifier(max_depth=max_depth,n_estimators=n_estimators,learning_rate=learning_rate,n_jobs=-1,random_state=42)
+        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=test_ratio,random_state=seeds[i],stratify=y)
+        xgb.fit(x_train,y_train)
+        print(f"no. of positives in splitted sample: {np.sum(y_test)}")
+        y_pred_proba=xgb.predict_proba(x_test)[:,1]
+        y_pred = (y_pred_proba > threshold).astype(int)
+        precisions.append(precision_score(y_test, y_pred))
+        if keep_fp_tp:
+            scores.append(score_model_optimal_k(y_test, y_pred_proba,n_features,keep_fp_tp=keep_fp_tp,max_k=int(1000*test_ratio),feature_penalty=200*test_ratio ))
+        else:
+            scores.append(score_model_optimal_k(y_test, y_pred_proba,n_features,keep_fp_tp=keep_fp_tp,max_k=int(1000*test_ratio),feature_penalty=200*test_ratio )[0])
+    return scores,precisions
