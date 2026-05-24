@@ -39,7 +39,7 @@ def get_subsets(arr):
     for x in arr:
         result += [curr + [x] for curr in result]
     return result[1:]
-def unpack_whole_feature_dict(dict,extract='common'):
+def unpack_whole_feature_dict(dict_,extract='common'):
     """
     returns the features found by different methods as a list. if extract parameter is set to 'common'
     it will return the features found by all methods applied in the passed dict, if extract is set to 'all_found'
@@ -47,7 +47,7 @@ def unpack_whole_feature_dict(dict,extract='common'):
     features found by at least one method as first element. all are return as arrays.
     """
     all_arrays = []
-    for value in dict.values():
+    for value in dict_.values():
         if isinstance(value, dict):
             all_arrays.extend(value.values())
         elif isinstance(value, list):
@@ -61,7 +61,7 @@ def unpack_whole_feature_dict(dict,extract='common'):
         return total_unique_features
     else:
         return total_unique_features,total_common_features
-def unpack_model_feature_dict(dict,model_key,extract='common'):
+def unpack_model_feature_dict(dict_,model_key,extract='common'):
     """
        returns the features found by a model method passed in argument model_key (ex. 'xgb')  as a list.
        if extract parameter is set to 'common' it will return the features found by all methods
@@ -71,7 +71,7 @@ def unpack_model_feature_dict(dict,model_key,extract='common'):
        """
     model_arrays = [
         arrays
-        for key, sub_dict in dict.items()
+        for key, sub_dict in dict_.items()
         if model_key in key and isinstance(sub_dict, dict)
         for arrays in sub_dict.values()
     ]

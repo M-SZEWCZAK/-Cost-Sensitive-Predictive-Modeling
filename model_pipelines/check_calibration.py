@@ -1,8 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve
-def check_calibration(model, x_test, y_test,savename=None):
-    y_prob = model.predict_proba(x_test)[:, 1]
+from sklearn.model_selection import StratifiedKFold
+from sklearn.base import clone
+
+
+def get_cv_calibration_predictions(model, X, y, n_splits=5):
+    """
+    Runs Stratified K-Fold CV to gather out-of-fold probability predictions.
+    """
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
+
+    all_y_test = []
+    all_y_prob = []
+    X_arr = X.to_numpy() if hasattr(X, "to_numpy") else np.array(X)
+    y_arr = y.to_numpy() if hasattr(y, "to_numpy") else np.array(y)
+
+    for train_idx, test_idx in cv.split(X_arr, y_arr):
+        X_train_fold, X_test_fold = X_arr[train_idx], X_arr[test_idx]
+        y_train_fold, y_test_fold = y_arr[train_idx], y_arr[test_idx]
+
+        fold_model = clone(model)
+        fold_model.fit(X_train_fold, y_train_fold)
+
+        prob_fold = fold_model.predict_proba(X_test_fold)[:, 1]
+
+        all_y_test.extend(y_test_fold)
+        all_y_prob.extend(prob_fold)
+
+    return np.array(all_y_test), np.array(all_y_prob)
+def check_calibration(y_prob, y_test,savename=None):
     y_prob=np.array(y_prob)
     y_test=np.array(y_test)
     n_bins = 10
@@ -20,7 +47,6 @@ def check_calibration(model, x_test, y_test,savename=None):
             fraction_of_positives[b] = y_test[mask].mean()
             mean_predicted[b] = y_prob[mask].mean()
 
-    # Step 5: Inspect the bins
     for b in range(n_bins):
         print(f"Bin {b+1:2d} | n={int(bin_counts[b]):4d} | "
               f"mean_pred={mean_predicted[b]:.3f} | "
