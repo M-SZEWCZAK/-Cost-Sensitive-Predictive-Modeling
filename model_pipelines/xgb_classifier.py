@@ -65,12 +65,12 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
     for i in range(n_subsets):
         clf = XGBClassifier(max_depth=max_depth,n_estimators=n_estimators,n_jobs=-1,random_state=42)
         clf.fit(X_train.loc[:, possible_subsets[i]], y_train)
-        y_pred = clf.predict(X_test.loc[:, possible_subsets[i]])
         y_proba = clf.predict_proba(X_test.loc[:, possible_subsets[i]])[:, 1]
+        custom_scores[i],best_thr = score_model_optimal_k(y_test, y_proba, lens[i],feature_penalty=200*test_ratio,max_k=int(1000*test_ratio))[:2]
+        y_pred=(y_proba>best_thr).astype(int)
         recall_scores[i] = recall_score(y_test, y_pred)
         precision_scores[i] = precision_score(y_test, y_pred)
         accuracy_scores[i] = accuracy_score(y_test, y_pred)
-        custom_scores[i] = score_model_optimal_k(y_test, y_proba, lens[i],feature_penalty=200*test_ratio,max_k=int(1000*test_ratio))[0]
         if i==0:
             best_model=clf
         elif custom_scores[i] > custom_scores[best_subset]:
@@ -129,10 +129,10 @@ def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_r
             for j in range(len(lr)):
                 clf = XGBClassifier(max_depth=max_depth, n_estimators=n_estimators,learning_rate=lr[j],n_jobs=-1,random_state=42)
                 clf.fit(x_train,y_train)
-                y_pred = clf.predict(x_test)
                 y_proba = clf.predict_proba(x_test)[:,1]
+                custom,best_thr=score_model_optimal_k(y_test, y_proba,n_features,max_k=int(1000*test_ratio),feature_penalty=200*test_ratio )[:2]
+                y_pred = (y_proba > best_thr).astype(int)
                 precision=precision_score(y_test, y_pred)
-                custom=score_model_optimal_k(y_test, y_proba,n_features,max_k=int(1000*test_ratio),feature_penalty=200*test_ratio )[0]
                 if custom>best_custom:
                     best_custom_hyperparameters['max_depth']=max_depth
                     best_custom_hyperparameters['n_estimators']=n_estimators
