@@ -105,7 +105,11 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
                 "Recall": recall_scores,
             },
         ).set_index("Subset index")
-        return best_model,features_selected,df
+        subset_dict={
+            i:possible_subsets[i]
+            for i in range(len(custom_scores))
+        }
+        return best_model,features_selected,df,subset_dict
     return best_model,features_selected
 def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_ratio=0.2):
     max_depths=[1,2,3,5]

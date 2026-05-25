@@ -1,6 +1,7 @@
-import numpy as np
+import itertools
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
 def find_common_elements(*arrays):
     """
     Finds the common subset of elements across an arbitrary number of arrays.
@@ -83,3 +84,30 @@ def unpack_model_feature_dict(dict_,model_key,extract='common'):
         return model_unique_features
     else:
         return model_unique_features,model_common_features
+def add_interaction_features(df: pd.DataFrame, feature_subset: list) -> pd.DataFrame:
+    """Generates pairwise interaction features (multiplication) for a specified
+    subset of features in a DataFrame.
+
+    Parameters:
+    -----------
+    df : pd.DataFrame
+        The input dataframe.
+    feature_subset : list
+        List of column names to create interactions for (expected to be < 8).
+
+    Returns:
+    --------
+    pd.DataFrame
+        A new DataFrame containing the original columns plus the interaction
+        features.
+    """
+    df_enhanced = df.copy()
+    missing_features = [f for f in feature_subset if f not in df.columns]
+    if missing_features:
+        raise ValueError(
+            f"The following features were not found in the DataFrame: {missing_features}"
+        )
+    for feat1, feat2 in itertools.combinations(feature_subset, 2):
+        feature_name = f"{feat1}_X_{feat2}"
+        df_enhanced[feature_name] = df[feat1] * df[feat2]
+    return df_enhanced
