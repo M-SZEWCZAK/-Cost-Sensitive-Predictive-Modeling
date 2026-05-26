@@ -2,11 +2,13 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 from xgboost import XGBClassifier
 import gc
+from sklearn.base import clone
 from model_pipelines.auxilliary_functions import *
 from eda.scoring_function import score_model_optimal_k
+from pathlib import Path
 def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=True):
     #max subset is a list of columns to be considered in final training
     x_train_=X_train.loc[:,max_subset]
@@ -53,7 +55,16 @@ def train_model_growing_subset(X_train, y_train, X_test, y_test,max_subset,plot=
         plt.ylabel("Custom metric")
         plt.show()
     return best_model,features_selected
-def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_depth=1,n_estimators=3000,plot=True,return_metrics=False,test_ratio=0.2):
+def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_depth=1,n_estimators=3000,plot=True,save_plot=False,save_path=None,return_metrics=False,test_ratio=0.2):
+    if save_plot and save_path is None:
+        print("No path to save plot provided! Plots will not be saved!")
+        save_plot = False
+    elif save_plot and save_path is not None:
+        dir_path = Path(save_path)
+        prec_path= dir_path / "precision.png"
+        rec_path= dir_path / "recall.png"
+        acc_path= dir_path / "accuracy.png"
+        cust_path= dir_path / "custom_score.png"
     possible_subsets=get_subsets(max_subset)
     n_subsets=len(possible_subsets)
     custom_scores=np.zeros(n_subsets)
@@ -82,18 +93,26 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
         plt.scatter(lens,precision_scores,label="Precision")
         plt.xlabel("Subset size")
         plt.ylabel("Precision")
+        if save_plot:
+            plt.savefig(prec_path)
         plt.show()
         plt.scatter(lens,accuracy_scores,label="Accuracy")
         plt.xlabel("Subset size")
         plt.ylabel("Accuracy")
+        if save_plot:
+            plt.savefig(acc_path)
         plt.show()
         plt.scatter(lens,recall_scores,label="Recall")
         plt.xlabel("Subset size")
         plt.ylabel("Recall")
+        if save_plot:
+            plt.savefig(rec_path)
         plt.show()
         plt.scatter(lens,custom_scores,label="Custom")
         plt.xlabel("Subset size")
         plt.ylabel("Custom score")
+        if save_plot:
+            plt.savefig(cust_path)
         plt.show()
     if return_metrics:
         df = pd.DataFrame(
@@ -150,6 +169,82 @@ def final_xgb_hyperparameter_grid_optimizer(x_train,y_train,x_test,y_test,test_r
                 # print(f"hyperparameters: max depth={max_depth}, n_estimators={n_estimators}, lr={lr[j]}, custom_score={custom}")
     return best_custom_hyperparameters,best_precision_hyperparameters
 
+
+def cv_xgb_hyperparameter_grid_optimizer(X, y, n_splits=5, test_ratio=0.2):
+    """
+    Combines Grid Search with Stratified K-Fold CV.
+    Evaluates hyperparameters using out-of-fold (OOF) calibration predictions.
+    """
+    max_depths = [1, 2, 3, 5]
+    n_estimatorss = [500, 1000, 2000, 3000]
+    lr = [0.001, 0.005, 0.01, 0.1]
+
+    best_custom = -float('inf')
+    best_precision = -float('inf')
+
+    best_custom_hyperparameters = {}
+    best_precision_hyperparameters = {}
+
+    n_features = X.shape[1]
+    X_arr = X.to_numpy() if hasattr(X, "to_numpy") else np.array(X)
+    y_arr = y.to_numpy() if hasattr(y, "to_numpy") else np.array(y)
+
+    # 1. Loop through the grid
+    for max_depth in max_depths:
+        for n_estimators in n_estimatorss:
+            for rate in lr:
+                base_model = XGBClassifier(
+                    max_depth=max_depth,
+                    n_estimators=n_estimators,
+                    learning_rate=rate,
+                    n_jobs=-1,
+                    random_state=42
+                )
+
+                oof_y_test = []
+                oof_y_proba = []
+
+                cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
+                for train_idx, test_idx in cv.split(X_arr, y_arr):
+                    X_train_fold, X_test_fold = X_arr[train_idx], X_arr[test_idx]
+                    y_train_fold, y_test_fold = y_arr[train_idx], y_arr[test_idx]
+
+                    fold_model = clone(base_model)
+                    fold_model.fit(X_train_fold, y_train_fold)
+
+                    prob_fold = fold_model.predict_proba(X_test_fold)[:, 1]
+
+                    oof_y_test.extend(y_test_fold)
+                    oof_y_proba.extend(prob_fold)
+                oof_y_test = np.array(oof_y_test)
+                oof_y_proba = np.array(oof_y_proba)
+                custom, best_thr = score_model_optimal_k(
+                    oof_y_test,
+                    oof_y_proba,
+                    n_features,
+                    max_k=int(1000 * test_ratio),
+                    feature_penalty=200 * test_ratio
+                )[:2]
+
+                oof_y_pred = (oof_y_proba > best_thr).astype(int)
+                precision = precision_score(oof_y_test, oof_y_pred)
+
+                if custom > best_custom:
+                    best_custom = custom
+                    best_custom_hyperparameters = {
+                        "max_depth": max_depth, "n_estimators": n_estimators, "lr": rate
+                    }
+
+                if precision > best_precision:
+                    best_precision = precision
+                    best_precision_hyperparameters = {
+                        "max_depth": max_depth, "n_estimators": n_estimators, "lr": rate
+                    }
+
+                # print(
+                #     f"Params -> depth: {max_depth}, trees: {n_estimators}, lr: {rate} | OOF Custom: {custom:.4f} | OOF Precision: {precision:.4f}")
+
+    return best_custom_hyperparameters, best_precision_hyperparameters
 def check_xgb_model_with_multi_split(x,y,max_depth,n_estimators,learning_rate,test_ratio=0.2,n_checks=5,keep_fp_tp=False,threshold=0.5):
     scores=[]
     precisions=[]

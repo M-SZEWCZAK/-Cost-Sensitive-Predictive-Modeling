@@ -2,6 +2,21 @@ import itertools
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import json
+from pathlib import Path
+def save_dict_to_json(data: dict, filepath: str | Path) -> None:
+    """Saves a dictionary to a JSON file, automatically creating destination directories.
+
+    Params:
+    data (dict): The dictionary to save.
+    filepath (str | Path): The destination path (e.g., 'output/results.json').
+    """
+    path = Path(filepath)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+    print(f"Successfully saved data to {path}")
 def find_common_elements(*arrays):
     """
     Finds the common subset of elements across an arbitrary number of arrays.
