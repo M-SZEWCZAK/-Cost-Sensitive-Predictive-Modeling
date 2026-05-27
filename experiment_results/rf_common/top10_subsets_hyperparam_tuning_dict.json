@@ -1,0 +1,232 @@
+{
+    "480": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6191174983978271,
+        "best_score": 1125,
+        "best_fp": 45,
+        "best_tp": 155,
+        "subset_list": [
+            "V416",
+            "V191",
+            "V265",
+            "V224",
+            "V160"
+        ]
+    },
+    "479": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6191174983978271,
+        "best_score": 1165,
+        "best_fp": 45,
+        "best_tp": 155,
+        "subset_list": [
+            "V191",
+            "V265",
+            "V224",
+            "V160"
+        ]
+    },
+    "224": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6191174983978271,
+        "best_score": 1165,
+        "best_fp": 45,
+        "best_tp": 155,
+        "subset_list": [
+            "V416",
+            "V191",
+            "V265",
+            "V224"
+        ]
+    },
+    "356": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.6370640397071838,
+        "best_score": 1075,
+        "best_fp": 47,
+        "best_tp": 151,
+        "subset_list": [
+            "V416",
+            "V11",
+            "V191",
+            "V265",
+            "V160"
+        ]
+    },
+    "100": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.6370640397071838,
+        "best_score": 1115,
+        "best_fp": 47,
+        "best_tp": 151,
+        "subset_list": [
+            "V416",
+            "V11",
+            "V191",
+            "V265"
+        ]
+    },
+    "355": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.6370640397071838,
+        "best_score": 1115,
+        "best_fp": 47,
+        "best_tp": 151,
+        "subset_list": [
+            "V11",
+            "V191",
+            "V265",
+            "V160"
+        ]
+    },
+    "236": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6228231191635132,
+        "best_score": 1070,
+        "best_fp": 46,
+        "best_tp": 154,
+        "subset_list": [
+            "V416",
+            "V11",
+            "V255",
+            "V191",
+            "V265",
+            "V224"
+        ]
+    },
+    "116": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.6393203735351562,
+        "best_score": 1085,
+        "best_fp": 47,
+        "best_tp": 152,
+        "subset_list": [
+            "V416",
+            "V11",
+            "V199",
+            "V191",
+            "V265"
+        ]
+    },
+    "491": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6228231191635132,
+        "best_score": 1070,
+        "best_fp": 46,
+        "best_tp": 154,
+        "subset_list": [
+            "V11",
+            "V255",
+            "V191",
+            "V265",
+            "V224",
+            "V160"
+        ]
+    },
+    "492": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6228231191635132,
+        "best_score": 1030,
+        "best_fp": 46,
+        "best_tp": 154,
+        "subset_list": [
+            "V416",
+            "V11",
+            "V255",
+            "V191",
+            "V265",
+            "V224",
+            "V160"
+        ]
+    }
+}
