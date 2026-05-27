@@ -1,9 +1,21 @@
 import itertools
+
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import json
 from pathlib import Path
+
+
+def numpy_converter(obj):
+    if isinstance(obj, (np.float32, np.float64)):
+        return float(obj)
+    if isinstance(obj, (np.int32, np.int64)):
+        return int(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
 def save_dict_to_json(data: dict, filepath: str | Path) -> None:
     """Saves a dictionary to a JSON file, automatically creating destination directories.
 
@@ -14,7 +26,7 @@ def save_dict_to_json(data: dict, filepath: str | Path) -> None:
     path = Path(filepath)
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+        json.dump(data, f, indent=4, ensure_ascii=False,default=numpy_converter)
 
     print(f"Successfully saved data to {path}")
 def find_common_elements(*arrays):

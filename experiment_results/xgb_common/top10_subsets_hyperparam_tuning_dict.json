@@ -1,0 +1,237 @@
+{
+    "46": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000,
+            "lr": 0.1
+        },
+        "best_threshold": 0.6695761680603027,
+        "best_score": 1195,
+        "best_fp": 39,
+        "best_tp": 159,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V255",
+            "V160"
+        ]
+    },
+    "126": {
+        "best_c_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 2000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 2000,
+            "lr": 0.1
+        },
+        "best_threshold": 0.8695874214172363,
+        "best_score": 1210,
+        "best_fp": 34,
+        "best_tp": 166,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V255",
+            "V191",
+            "V160",
+            "V176"
+        ]
+    },
+    "61": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.690162181854248,
+        "best_score": 1260,
+        "best_fp": 36,
+        "best_tp": 164,
+        "subset_list": [
+            "V215",
+            "V380",
+            "V255",
+            "V191",
+            "V160"
+        ]
+    },
+    "110": {
+        "best_c_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 3000,
+            "lr": 0.005
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 3000,
+            "lr": 0.005
+        },
+        "best_threshold": 0.6786051988601685,
+        "best_score": 1175,
+        "best_fp": 37,
+        "best_tp": 160,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V255",
+            "V160",
+            "V176"
+        ]
+    },
+    "62": {
+        "best_c_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 2000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6890692710876465,
+        "best_score": 1250,
+        "best_fp": 34,
+        "best_tp": 166,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V255",
+            "V191",
+            "V160"
+        ]
+    },
+    "54": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 1000,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 1000,
+            "lr": 0.1
+        },
+        "best_threshold": 0.654746949672699,
+        "best_score": 1205,
+        "best_fp": 39,
+        "best_tp": 160,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V191",
+            "V160"
+        ]
+    },
+    "29": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 2000,
+            "lr": 0.005
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 2000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.5817278623580933,
+        "best_score": 1165,
+        "best_fp": 45,
+        "best_tp": 155,
+        "subset_list": [
+            "V215",
+            "V380",
+            "V255",
+            "V191"
+        ]
+    },
+    "125": {
+        "best_c_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.7618565559387207,
+        "best_score": 1175,
+        "best_fp": 39,
+        "best_tp": 161,
+        "subset_list": [
+            "V215",
+            "V380",
+            "V255",
+            "V191",
+            "V160",
+            "V176"
+        ]
+    },
+    "94": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000,
+            "lr": 0.01
+        },
+        "best_threshold": 0.6834925413131714,
+        "best_score": 1175,
+        "best_fp": 39,
+        "best_tp": 161,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V380",
+            "V255",
+            "V191",
+            "V176"
+        ]
+    },
+    "58": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 500,
+            "lr": 0.1
+        },
+        "best_threshold": 0.7006165385246277,
+        "best_score": 1200,
+        "best_fp": 40,
+        "best_tp": 160,
+        "subset_list": [
+            "V342",
+            "V215",
+            "V255",
+            "V191",
+            "V160"
+        ]
+    }
+}
