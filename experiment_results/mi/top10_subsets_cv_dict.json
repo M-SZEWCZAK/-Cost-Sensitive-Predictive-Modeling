@@ -1,0 +1,72 @@
+{
+    "486": {
+        "precision": 0.7224448897795591,
+        "accuracy": 0.5912,
+        "recall": 0.28979099678456594,
+        "cv_custom_score": 4435,
+        "cv_best_threshold": 0.6178120970726013
+    },
+    "357": {
+        "precision": 0.6895161290322581,
+        "accuracy": 0.5776,
+        "recall": 0.27491961414790994,
+        "cv_custom_score": 4310,
+        "cv_best_threshold": 0.613345205783844
+    },
+    "373": {
+        "precision": 0.7097097097097097,
+        "accuracy": 0.5862,
+        "recall": 0.284967845659164,
+        "cv_custom_score": 4450,
+        "cv_best_threshold": 0.6150651574134827
+    },
+    "358": {
+        "precision": 0.7014028056112225,
+        "accuracy": 0.5828,
+        "recall": 0.28135048231511256,
+        "cv_custom_score": 4320,
+        "cv_best_threshold": 0.6161892414093018
+    },
+    "381": {
+        "precision": 0.7097097097097097,
+        "accuracy": 0.5862,
+        "recall": 0.284967845659164,
+        "cv_custom_score": 4250,
+        "cv_best_threshold": 0.6150651574134827
+    },
+    "485": {
+        "precision": 0.7028112449799196,
+        "accuracy": 0.5832,
+        "recall": 0.28135048231511256,
+        "cv_custom_score": 4330,
+        "cv_best_threshold": 0.6146007180213928
+    },
+    "366": {
+        "precision": 0.7137137137137137,
+        "accuracy": 0.5878,
+        "recall": 0.2865755627009646,
+        "cv_custom_score": 4310,
+        "cv_best_threshold": 0.6195330619812012
+    },
+    "494": {
+        "precision": 0.7337337337337337,
+        "accuracy": 0.5958,
+        "recall": 0.29461414790996787,
+        "cv_custom_score": 4410,
+        "cv_best_threshold": 0.6230452656745911
+    },
+    "382": {
+        "precision": 0.7137137137137137,
+        "accuracy": 0.5878,
+        "recall": 0.2865755627009646,
+        "cv_custom_score": 4110,
+        "cv_best_threshold": 0.6195330619812012
+    },
+    "510": {
+        "precision": 0.7337337337337337,
+        "accuracy": 0.5958,
+        "recall": 0.29461414790996787,
+        "cv_custom_score": 4210,
+        "cv_best_threshold": 0.6230452656745911
+    }
+}

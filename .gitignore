@@ -5,6 +5,7 @@ __pycache__/
 venv/
 env/
 model_pipelines/function_tester.ipynb
+experiment_flows/final_selection.ipynb
 .ipynb_checkpoints/
 .pytest_cache/
 .DS_Store
