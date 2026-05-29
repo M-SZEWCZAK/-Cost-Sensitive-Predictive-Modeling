@@ -1,0 +1,72 @@
+{
+    "224": {
+        "precision": 0.6646646646646647,
+        "accuracy": 0.5682,
+        "recall": 0.26688102893890675,
+        "cv_custom_score": 4175,
+        "cv_best_threshold": 0.5873814225196838
+    },
+    "736": {
+        "precision": 0.6596596596596597,
+        "accuracy": 0.5662,
+        "recall": 0.26487138263665594,
+        "cv_custom_score": 3900,
+        "cv_best_threshold": 0.5907437801361084
+    },
+    "228": {
+        "precision": 0.6686807653575025,
+        "accuracy": 0.5694,
+        "recall": 0.26688102893890675,
+        "cv_custom_score": 4005,
+        "cv_best_threshold": 0.5850740671157837
+    },
+    "754": {
+        "precision": 0.6770938446014128,
+        "accuracy": 0.5726,
+        "recall": 0.2696945337620579,
+        "cv_custom_score": 3720,
+        "cv_best_threshold": 0.6301575899124146
+    },
+    "500": {
+        "precision": 0.6579476861167002,
+        "accuracy": 0.5652,
+        "recall": 0.2628617363344051,
+        "cv_custom_score": 3450,
+        "cv_best_threshold": 0.64676833152771
+    },
+    "752": {
+        "precision": 0.6750503018108652,
+        "accuracy": 0.572,
+        "recall": 0.2696945337620579,
+        "cv_custom_score": 3905,
+        "cv_best_threshold": 0.6008908748626709
+    },
+    "744": {
+        "precision": 0.6750503018108652,
+        "accuracy": 0.572,
+        "recall": 0.2696945337620579,
+        "cv_custom_score": 3905,
+        "cv_best_threshold": 0.6008908748626709
+    },
+    "762": {
+        "precision": 0.6770938446014128,
+        "accuracy": 0.5726,
+        "recall": 0.2696945337620579,
+        "cv_custom_score": 3520,
+        "cv_best_threshold": 0.6301575899124146
+    },
+    "508": {
+        "precision": 0.6579476861167002,
+        "accuracy": 0.5652,
+        "recall": 0.2628617363344051,
+        "cv_custom_score": 3250,
+        "cv_best_threshold": 0.64676833152771
+    },
+    "760": {
+        "precision": 0.6750503018108652,
+        "accuracy": 0.572,
+        "recall": 0.2696945337620579,
+        "cv_custom_score": 3705,
+        "cv_best_threshold": 0.6008908748626709
+    }
+}
