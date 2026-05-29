@@ -7,6 +7,8 @@ import pandas as pd
 import json
 from pathlib import Path
 
+from numba.core.types import Boolean
+
 
 def numpy_converter(obj):
     if isinstance(obj, (np.float32, np.float64)):
@@ -29,6 +31,13 @@ def save_dict_to_json(data: dict, filepath: str | Path) -> None:
         json.dump(data, f, indent=4, ensure_ascii=False,default=numpy_converter)
 
     print(f"Successfully saved data to {path}")
+def load_dict_from_json(filepath: str | Path,make_numeric_keys=True ) -> dict:
+    with open(filepath, 'r') as file:
+        dict_ = json.load(file)
+    if make_numeric_keys:
+        dict_ = {int(k): v for k, v in dict_.items()}
+    return dict_
+
 def find_common_elements(*arrays):
     """
     Finds the common subset of elements across an arbitrary number of arrays.
