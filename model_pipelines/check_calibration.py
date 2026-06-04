@@ -29,10 +29,9 @@ def get_cv_calibration_predictions(model, X, y, n_splits=5):
         all_y_prob.extend(prob_fold)
 
     return np.array(all_y_test), np.array(all_y_prob)
-def check_calibration(y_prob, y_test,savename=None):
+def check_calibration(y_prob, y_test,n_bins=10,savename=None):
     y_prob=np.array(y_prob)
     y_test=np.array(y_test)
-    n_bins = 10
     bin_edges = np.percentile(y_prob, np.linspace(0, 100, n_bins + 1))
     bin_edges[0] -= 1e-8   # include the minimum value
     bin_indices = np.digitize(y_prob, bin_edges) - 1

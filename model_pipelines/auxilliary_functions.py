@@ -7,7 +7,6 @@ import pandas as pd
 import json
 from pathlib import Path
 
-from numba.core.types import Boolean
 
 
 def numpy_converter(obj):
@@ -58,8 +57,8 @@ def plot_correlation_matrix(m):
     plt.figure(figsize=(20, 15))
     sns.heatmap(m,
                 annot=True,
-                cmap='RdBu_r',  # Red-Blue is often more intuitive for +/- correlations
-                center=0,  # Ensure 0 is the neutral color
+                cmap='RdBu_r',
+                center=0,
                 linewidths=.1,
                 cbar_kws={"shrink": .8},
                 vmin=-1, vmax=1)
@@ -120,7 +119,7 @@ def unpack_model_feature_dict(dict_,model_key,extract='common'):
         return model_unique_features
     else:
         return model_unique_features,model_common_features
-def add_interaction_features(df: pd.DataFrame, feature_subset: list) -> pd.DataFrame:
+def add_interaction_features(df: pd.DataFrame, feature_subset: list, interaction,feature_deg=1) -> pd.DataFrame:
     """Generates pairwise interaction features (multiplication) for a specified
     subset of features in a DataFrame.
 
@@ -130,6 +129,10 @@ def add_interaction_features(df: pd.DataFrame, feature_subset: list) -> pd.DataF
         The input dataframe.
     feature_subset : list
         List of column names to create interactions for (expected to be < 8).
+    interaction: string
+        interaction type, could be "add" or "mult" for addition and multiplication respectively.
+    feature_deg : float
+        degree of feature used in operation (ex. feature_deg = 2 means squared values of the feature are used)
 
     Returns:
     --------
@@ -144,6 +147,17 @@ def add_interaction_features(df: pd.DataFrame, feature_subset: list) -> pd.DataF
             f"The following features were not found in the DataFrame: {missing_features}"
         )
     for feat1, feat2 in itertools.combinations(feature_subset, 2):
-        feature_name = f"{feat1}_X_{feat2}"
-        df_enhanced[feature_name] = df[feat1] * df[feat2]
+        if interaction == "add":
+            feature_name = f"{feat1}**{feature_deg}_+_{feat2}**{feature_deg}"
+            df_enhanced[feature_name] = (df[feat1] ** feature_deg) + (df[feat2] ** feature_deg)
+        elif interaction == "mult":
+            feature_name = f"{feat1}**{feature_deg}_X_{feat2}**{feature_deg}"
+            df_enhanced[feature_name] = (df[feat1]**feature_deg) * (df[feat2]**feature_deg)
+        else :
+            raise ValueError(f"Unsupported interaction type: {interaction}. Supported types: 'add' and 'mult'")
     return df_enhanced
+def compute_ecdf(data):
+    """Computes the ECDF values for a DataFrame."""
+    x_sorted = np.sort(data)
+    y_values = np.arange(1, len(data) + 1) / len(data)
+    return x_sorted, y_values
