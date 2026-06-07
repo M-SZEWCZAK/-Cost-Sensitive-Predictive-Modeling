@@ -1,0 +1,213 @@
+{
+    "394": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000
+        },
+        "best_threshold": 0.544217307551033,
+        "best_score": 1120,
+        "best_fp": 44,
+        "best_tp": 154,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V416",
+            "V11",
+            "V265"
+        ]
+    },
+    "418": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 3000
+        },
+        "best_threshold": 0.544217307551033,
+        "best_score": 1120,
+        "best_fp": 44,
+        "best_tp": 154,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V160",
+            "V11",
+            "V265"
+        ]
+    },
+    "146": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 1000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 1000
+        },
+        "best_threshold": 0.5550557923296344,
+        "best_score": 1075,
+        "best_fp": 51,
+        "best_tp": 149,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V176",
+            "V11"
+        ]
+    },
+    "170": {
+        "best_c_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500
+        },
+        "best_threshold": 0.5802865247619585,
+        "best_score": 900,
+        "best_fp": 60,
+        "best_tp": 140,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V416",
+            "V160",
+            "V11"
+        ]
+    },
+    "450": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 500
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 2000
+        },
+        "best_threshold": 0.5251217423791714,
+        "best_score": 1035,
+        "best_fp": 51,
+        "best_tp": 149,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V199",
+            "V11",
+            "V265"
+        ]
+    },
+    "178": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 3000
+        },
+        "best_threshold": 0.5212702381247228,
+        "best_score": 1040,
+        "best_fp": 50,
+        "best_tp": 149,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V176",
+            "V160",
+            "V11"
+        ]
+    },
+    "202": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 2000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 2000
+        },
+        "best_threshold": 0.5521092015482093,
+        "best_score": 1035,
+        "best_fp": 51,
+        "best_tp": 149,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V416",
+            "V199",
+            "V11"
+        ]
+    },
+    "226": {
+        "best_c_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 2000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 2,
+            "n_estimators": 2000
+        },
+        "best_threshold": 0.5521092015482093,
+        "best_score": 1035,
+        "best_fp": 51,
+        "best_tp": 149,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V160",
+            "V199",
+            "V11"
+        ]
+    },
+    "482": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 2000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500
+        },
+        "best_threshold": 0.5205529105742202,
+        "best_score": 1010,
+        "best_fp": 50,
+        "best_tp": 150,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V160",
+            "V199",
+            "V11",
+            "V265"
+        ]
+    },
+    "458": {
+        "best_c_hyperparams": {
+            "max_depth": 1,
+            "n_estimators": 2000
+        },
+        "best_p_hyperparams": {
+            "max_depth": 3,
+            "n_estimators": 500
+        },
+        "best_threshold": 0.5205529105742202,
+        "best_score": 1010,
+        "best_fp": 50,
+        "best_tp": 150,
+        "subset_list": [
+            "V191",
+            "V255",
+            "V416",
+            "V199",
+            "V11",
+            "V265"
+        ]
+    }
+}

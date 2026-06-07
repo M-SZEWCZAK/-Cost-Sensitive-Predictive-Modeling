@@ -44,6 +44,7 @@ def train_model_all_combinations(X_train,y_train,X_test,y_test,max_subset,max_de
             best_subset = i
             best_model = clf
         gc.collect()
+        print(f"subset {i} finished")
     features_selected=possible_subsets[best_subset]
     if plot:
         plt.scatter(lens,precision_scores,label="Precision")
