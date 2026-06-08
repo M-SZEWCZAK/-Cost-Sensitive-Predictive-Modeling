@@ -175,9 +175,9 @@ def cv_xgb_hyperparameter_grid_optimizer(X, y, n_splits=5, test_ratio=0.2):
     Combines Grid Search with Stratified K-Fold CV.
     Evaluates hyperparameters using out-of-fold (OOF) calibration predictions.
     """
-    max_depths = [1, 2, 3, 5]
-    n_estimatorss = [500, 1000, 2000, 3000]
-    lr = [0.001, 0.005, 0.01, 0.1]
+    max_depths = [1, 2, 3]
+    n_estimatorss = [100,500, 1000, 2000, 3000]
+    lr = [0.01, 0.1,0.2,0.3]
 
     best_custom = -float('inf')
     best_precision = -float('inf')

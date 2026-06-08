@@ -1,0 +1,251 @@
+{
+    "subset": [
+        "V215",
+        "V380",
+        "V255",
+        "V191",
+        "V160"
+    ],
+    "enhanced_subset": [
+        "V215",
+        "V380",
+        "V255",
+        "V191",
+        "V160",
+        "V380**2_+_V215**2",
+        "V380**2_+_V255**2",
+        "V160**2_+_V255**2"
+    ],
+    "hyperparam_grid": {
+        "0": {
+            "lr": 0.1,
+            "n_estimators": 500,
+            "max_depth": 1
+        },
+        "1": {
+            "lr": 0.1,
+            "n_estimators": 500,
+            "max_depth": 2
+        },
+        "2": {
+            "lr": 0.1,
+            "n_estimators": 500,
+            "max_depth": 3
+        },
+        "3": {
+            "lr": 0.1,
+            "n_estimators": 1000,
+            "max_depth": 1
+        },
+        "4": {
+            "lr": 0.1,
+            "n_estimators": 1000,
+            "max_depth": 2
+        },
+        "5": {
+            "lr": 0.1,
+            "n_estimators": 1000,
+            "max_depth": 3
+        },
+        "6": {
+            "lr": 0.1,
+            "n_estimators": 2000,
+            "max_depth": 1
+        },
+        "7": {
+            "lr": 0.1,
+            "n_estimators": 2000,
+            "max_depth": 2
+        },
+        "8": {
+            "lr": 0.1,
+            "n_estimators": 2000,
+            "max_depth": 3
+        },
+        "9": {
+            "lr": 0.1,
+            "n_estimators": 3000,
+            "max_depth": 1
+        },
+        "10": {
+            "lr": 0.1,
+            "n_estimators": 3000,
+            "max_depth": 2
+        },
+        "11": {
+            "lr": 0.1,
+            "n_estimators": 3000,
+            "max_depth": 3
+        }
+    },
+    "results": {
+        "0": {
+            "pure": {
+                "precision": 0.7507507507507507,
+                "custom": 5265,
+                "accuracy": 0.6026,
+                "threshold": 0.6491349339485168
+            },
+            "enhanced": {
+                "precision": 0.751503006012024,
+                "custom": 5270,
+                "accuracy": 0.6028,
+                "threshold": 0.661177396774292
+            }
+        },
+        "1": {
+            "pure": {
+                "precision": 0.7464788732394366,
+                "custom": 5170,
+                "accuracy": 0.6004,
+                "threshold": 0.6843252182006836
+            },
+            "enhanced": {
+                "precision": 0.7444889779559118,
+                "custom": 5165,
+                "accuracy": 0.6,
+                "threshold": 0.6976101398468018
+            }
+        },
+        "2": {
+            "pure": {
+                "precision": 0.7334669338677354,
+                "custom": 5000,
+                "accuracy": 0.5956,
+                "threshold": 0.7137598395347595
+            },
+            "enhanced": {
+                "precision": 0.7424849699398798,
+                "custom": 5135,
+                "accuracy": 0.5992,
+                "threshold": 0.7257813215255737
+            }
+        },
+        "3": {
+            "pure": {
+                "precision": 0.7527527527527528,
+                "custom": 5295,
+                "accuracy": 0.6034,
+                "threshold": 0.6597968339920044
+            },
+            "enhanced": {
+                "precision": 0.7487487487487487,
+                "custom": 5235,
+                "accuracy": 0.6018,
+                "threshold": 0.6672136783599854
+            }
+        },
+        "4": {
+            "pure": {
+                "precision": 0.7376884422110552,
+                "custom": 5045,
+                "accuracy": 0.597,
+                "threshold": 0.7109147906303406
+            },
+            "enhanced": {
+                "precision": 0.7301905717151455,
+                "custom": 4945,
+                "accuracy": 0.5942,
+                "threshold": 0.7169833779335022
+            }
+        },
+        "5": {
+            "pure": {
+                "precision": 0.7267267267267268,
+                "custom": 4905,
+                "accuracy": 0.593,
+                "threshold": 0.7513473033905029
+            },
+            "enhanced": {
+                "precision": 0.7299196787148594,
+                "custom": 4935,
+                "accuracy": 0.594,
+                "threshold": 0.7636649012565613
+            }
+        },
+        "6": {
+            "pure": {
+                "precision": 0.749498997995992,
+                "custom": 5240,
+                "accuracy": 0.602,
+                "threshold": 0.6674988269805908
+            },
+            "enhanced": {
+                "precision": 0.7517517517517518,
+                "custom": 5280,
+                "accuracy": 0.603,
+                "threshold": 0.6738653182983398
+            }
+        },
+        "7": {
+            "pure": {
+                "precision": 0.7324649298597194,
+                "custom": 4985,
+                "accuracy": 0.5952,
+                "threshold": 0.7368136048316956
+            },
+            "enhanced": {
+                "precision": 0.7144288577154309,
+                "custom": 4715,
+                "accuracy": 0.588,
+                "threshold": 0.7526161074638367
+            }
+        },
+        "8": {
+            "pure": {
+                "precision": 0.7187187187187187,
+                "custom": 4785,
+                "accuracy": 0.5898,
+                "threshold": 0.8109267950057983
+            },
+            "enhanced": {
+                "precision": 0.7024048096192385,
+                "custom": 4535,
+                "accuracy": 0.5832,
+                "threshold": 0.8189792633056641
+            }
+        },
+        "9": {
+            "pure": {
+                "precision": 0.7497497497497497,
+                "custom": 5250,
+                "accuracy": 0.6022,
+                "threshold": 0.6699750423431396
+            },
+            "enhanced": {
+                "precision": 0.7517517517517518,
+                "custom": 5280,
+                "accuracy": 0.603,
+                "threshold": 0.6733861565589905
+            }
+        },
+        "10": {
+            "pure": {
+                "precision": 0.720440881763527,
+                "custom": 4805,
+                "accuracy": 0.5904,
+                "threshold": 0.76121586561203
+            },
+            "enhanced": {
+                "precision": 0.7121364092276831,
+                "custom": 4675,
+                "accuracy": 0.587,
+                "threshold": 0.7820224165916443
+            }
+        },
+        "11": {
+            "pure": {
+                "precision": 0.7097097097097097,
+                "custom": 4650,
+                "accuracy": 0.5862,
+                "threshold": 0.8486738204956055
+            },
+            "enhanced": {
+                "precision": 0.6906906906906907,
+                "custom": 4365,
+                "accuracy": 0.5786,
+                "threshold": 0.8587861657142639
+            }
+        }
+    }
+}
